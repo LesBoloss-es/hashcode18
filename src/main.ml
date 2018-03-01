@@ -16,9 +16,16 @@ let () =
         List.map
           (fun (name, strategy) ->
             Format.printf "  Strategy %s@." name;
-            let solution = strategy problem in
+            let solution =
+              try
+                strategy problem
+              with
+                _ ->
+                Format.eprintf "    Strategy %s failed! Using dummy solution@." name;
+                [||] (* dummy solution *)
+            in
             solution_to_file ("solutions/all/"^name^"_"^file) solution;
-            let score = 0 (* score problem solution *) in
+            let score = score problem solution in
             Format.printf "    Score = %d@." score;
             (score, name, solution))
           strategies

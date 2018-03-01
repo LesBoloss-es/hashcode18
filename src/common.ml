@@ -16,9 +16,7 @@ type ride =
 (* Problem *)
 
 type problem =
-  { rows : int ;
-    columns : int ;
-    vehicles : int ;
+  { vehicles : int ;
     rides : ride array ;
     bonus : int ;
     steps : int }
@@ -26,7 +24,7 @@ type problem =
 let problem_of_file filename =
   let ic = open_in filename in
   match String.split_on_char ' ' (input_line ic) with
-  | [rows; columns; vehicles; number_of_rides; bonus; steps] ->
+  | [_rows; _columns; vehicles; number_of_rides; bonus; steps] ->
      (
        let number_of_rides = int_of_string number_of_rides in
        let rides = Array.make number_of_rides (Obj.magic ()) in
@@ -45,9 +43,7 @@ let problem_of_file filename =
          | _ -> assert false
        done;
        close_in ic;
-       { rows = int_of_string rows ;
-         columns = int_of_string columns ;
-         vehicles = int_of_string vehicles ;
+       { vehicles = int_of_string vehicles ;
          rides ;
          bonus = int_of_string bonus ;
          steps = int_of_string steps }
@@ -76,7 +72,7 @@ let solution_to_file filename solution =
 let score problem solution =
   let score = ref 0 in
   let ride_assigned = Array.make (Array.length problem.rides) (-1) in
-  for vehicle = 0 to problem.vehicles do
+  for vehicle = 0 to problem.vehicles - 1 do
     let position = ref (0, 0) in
     let time = ref 0 in
     List.iter
@@ -85,7 +81,7 @@ let score problem solution =
           Format.eprintf "ERROR: trying to assign ride %d to vehicles %d and %d@." ride_number vehicle ride_assigned.(ride_number)
         else
           ride_assigned.(ride_number) <- vehicle;
-        
+
         let ride = problem.rides.(ride_number) in
 
         (* Go to the starting point *)
@@ -104,9 +100,10 @@ let score problem solution =
 
         (* Do the ride *)
         time := !time + ride.duration ;
-
+        position := ride.finish;
+        
         (* Check that we are there in time *)
-        if !time <(*FIXME:strict?*) ride.latest_finish && !time <=(*FIXME:large?*) problem.steps then
+        if !time <=(*FIXME:strict?*) ride.latest_finish && !time <=(*FIXME:large?*) problem.steps then
           score := !score + (if bonus_deserved then problem.bonus else 0) + ride.duration
         else
           Format.eprintf "WARNING: vehicle %d finished ride %d too late@." vehicle ride_number
