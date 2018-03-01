@@ -8,6 +8,7 @@ let () =
   print_endline "==========[ Les Boloss ]==========";
   let files = Sys.readdir "problems" in
   Array.sort compare files;
+  let total_score = ref 0 in
   Array.iter
     (fun file ->
       Format.printf "Problem %s@." file;
@@ -31,9 +32,11 @@ let () =
           strategies
       in
       match List.sort compare scores with
-      | (_, name, solution) :: _ ->
+      | (score, name, solution) :: _ ->
          Format.printf "  Taking %s's solution@." name;
+         total_score := !total_score + score;
          solution_to_file ("solutions/bests/"^file) solution
       | _ -> assert false)
     files;
+  Format.printf "Total score: %d@." !total_score;
   print_endline "==========[ Boloss Out ]=========="
