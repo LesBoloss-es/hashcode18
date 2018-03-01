@@ -1,8 +1,8 @@
 
 open Common
-   
+
 let strategies : (string * (problem -> solution)) list =
-  ["I like bonuses", Naive.i_like_bonuses]
+  ["One", Naive.schedule_with_score Linear.one]
 
 let () =
   print_endline "==========[ Les Boloss ]==========";

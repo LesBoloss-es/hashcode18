@@ -84,14 +84,14 @@ let i_like_bonuses (p : problem) : solution =
 *)
 
 
-let i_like_bonuses (p : problem) : solution =
+let schedule_with_score score (p : problem) : solution =
   let cars = Array.make p.vehicles (0, (0, 0), [], false) in
   let rides_booked = Array.make (Array.length p.rides) false in
   while Array.exists (fun (_, _, _, finished) -> not finished) cars do
     for i = 0 to p.vehicles - 1 do
       let t, pos, queue, finished = cars.(i) in
       if not finished then begin
-        let r = find_best Linear.one t pos p rides_booked in
+        let r = find_best score t pos p rides_booked in
         if r >= 0 then begin
           rides_booked.(r) <- true;
           let end_t = end_time t pos p r in
