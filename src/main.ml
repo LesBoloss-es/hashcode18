@@ -2,11 +2,16 @@
 open Common
 
 let neg_compare x y = - compare x y
-   
+
 let strategies : (string * (problem -> solution)) list =
-  ["One Bonus 1", Naive.schedule_with_score (Linear.one_bonus 1) ;
-   "One Bonus 10", Naive.schedule_with_score (Linear.one_bonus 10) ;
-   "One Bonus 100", Naive.schedule_with_score (Linear.one_bonus 100) ]
+  [
+    "One Bonus 1", Naive.schedule_with_score   Naive.naive_choice (Linear.one_bonus 1) ;
+    "One Bonus 10", Naive.schedule_with_score  Naive.naive_choice (Linear.one_bonus 10) ;
+    "One Bonus 100", Naive.schedule_with_score Naive.naive_choice (Linear.one_bonus 100) ;
+    "One Bonus 1 AH", Naive.schedule_with_score   Naive.naive_choice_better (Linear.one_bonus 1) ;
+    "One Bonus 10 AH", Naive.schedule_with_score  Naive.naive_choice_better (Linear.one_bonus 10) ;
+    "One Bonus 100 AH", Naive.schedule_with_score Naive.naive_choice_better (Linear.one_bonus 100) ;
+  ]
 
 let () =
   print_endline "==========[ Les Boloss ]==========";

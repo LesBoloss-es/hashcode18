@@ -4,11 +4,11 @@ OCB = ocamlbuild -use-ocamlfind
 
 run: build
 	mkdir solutions solutions/all solutions/bests
-	./main.byte || true
+	./main.native || true
 	mv solutions solutions-$(shell date +%Y-%m-%d-%H-%M-%S)
 
 build:
-	$(OCB) main.byte
+	$(OCB) main.native
 
 clean:
 	$(OCB) -clean

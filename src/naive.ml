@@ -48,7 +48,7 @@ let schedule_with_score score (p : problem) : solution =
   to_solution cars
 
 
-let naive_choice cars last_chosen =
+let naive_choice p cars last_chosen =
   let i = ref last_chosen in
   let incr () =
     if !i + 1 = Array.length cars
@@ -66,16 +66,49 @@ let naive_choice cars last_chosen =
   if !i = last_chosen then -1 else !i
 
 
-let less_advanced cars _ =
+let naive_choice_better p cars last_chosen =
+  let i = ref last_chosen in
+  let incr () =
+    if !i + 1 = Array.length cars
+    then i := 0
+    else i := !i + 1
+  in
+  let break = ref false in
+  incr () ;
+  while !i <> last_chosen && not !break do
+    let t, _, _, finished = cars.(!i) in
+    (* let threshold = p.average_ride_size in *)
+    let threshold = 10 in
+    let must_choose = Array.for_all (fun (t', _, _, f) -> f || t' + threshold >= p.steps) cars in
+    if finished
+    then incr ()
+    else begin
+      if t + threshold >= p.steps && not must_choose then
+        incr ()
+      else
+        break := true
+    end
+  done;
+  if !i = last_chosen then -1 else !i
+
+
+let less_advanced p cars last_chosen =
   let i = ref (-1) in
   let min_t = ref max_int in
   let select j (t, _, _, finished) =
+    if not finished && t < !min_t && j <> last_chosen then begin
+      i := j;
+      min_t := t
+    end
+  in
+  let select' j (t, _, _, finished) =
     if not finished && t < !min_t then begin
       i := j;
       min_t := t
     end
   in
   Array.iteri select cars;
+  if !i = -1 then Array.iteri select' cars;
   !i
 
 
@@ -97,8 +130,6 @@ let schedule_with_score choice score (p : problem) : solution =
         cars.(!i) <- t, pos, queue, true
       end
     end;
-    i := choice cars !i
+    i := choice p cars !i
   done;
   to_solution cars
-
-let schedule_with_score = schedule_with_score naive_choice
