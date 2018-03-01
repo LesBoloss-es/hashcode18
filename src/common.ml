@@ -101,9 +101,9 @@ let score problem solution =
         (* Do the ride *)
         time := !time + ride.duration ;
         position := ride.finish;
-        
+
         (* Check that we are there in time *)
-        if !time <=(*FIXME:strict?*) ride.latest_finish && !time <=(*FIXME:large?*) problem.steps then
+        if !time <= ride.latest_finish && !time <= problem.steps then
           score := !score + (if bonus_deserved then problem.bonus else 0) + ride.duration
         else
           Format.eprintf "WARNING: vehicle %d finished ride %d too late@." vehicle ride_number

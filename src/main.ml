@@ -1,6 +1,6 @@
 
 open Common
-
+   
 let strategies : (string * (problem -> solution)) list =
   ["I like bonuses", Naive.i_like_bonuses]
 
