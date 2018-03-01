@@ -77,8 +77,7 @@ let naive_choice_better p cars last_chosen =
   incr () ;
   while !i <> last_chosen && not !break do
     let t, _, _, finished = cars.(!i) in
-    (* let threshold = p.average_ride_size in *)
-    let threshold = 10 in
+    let threshold = p.average_ride_size in
     let must_choose = Array.for_all (fun (t', _, _, f) -> f || t' + threshold >= p.steps) cars in
     if finished
     then incr ()
