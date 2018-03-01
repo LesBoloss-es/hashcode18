@@ -2,8 +2,8 @@
 open Common
 
 let strategies : (string * (problem -> solution)) list =
-  [ ]
-   
+  ["I like bonuses", Naive.i_like_bonuses]
+
 let () =
   print_endline "==========[ Les Boloss ]==========";
   Array.iter
@@ -15,7 +15,7 @@ let () =
           (fun (name, strategy) ->
             Format.printf "  Strategy %s@." name;
             let solution = strategy problem in
-            let score = score problem solution in
+            let score = 0 (* score problem solution *) in
             Format.printf "    Score = %d@." score;
             (score, name, solution))
           strategies
