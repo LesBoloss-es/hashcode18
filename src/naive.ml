@@ -22,7 +22,7 @@ let find_any t cur_pos p rides_booked =
   let find i ride =
     if !r = -1 &&
        (not rides_booked.(i)) &&
-       t + distance ride.start cur_pos + ride.duration <= ride.latest_finish then begin
+       t + distance ride.start cur_pos + ride.duration < ride.latest_finish then begin
       r := i;
       end_t := t + distance ride.start cur_pos + ride.duration
     end
