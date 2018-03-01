@@ -4,14 +4,21 @@ open Common
 let neg_compare x y = - compare x y
 
 let strategies : (string * (problem -> solution)) list =
-  [
-    "One Bonus 1", Naive.schedule_with_score   Naive.naive_choice (Linear.one_bonus 1) ;
-    "One Bonus 10", Naive.schedule_with_score  Naive.naive_choice (Linear.one_bonus 10) ;
-    "One Bonus 100", Naive.schedule_with_score Naive.naive_choice (Linear.one_bonus 100) ;
-    "One Bonus 1 AH", Naive.schedule_with_score   Naive.naive_choice_better (Linear.one_bonus 1) ;
-    "One Bonus 10 AH", Naive.schedule_with_score  Naive.naive_choice_better (Linear.one_bonus 10) ;
-    "One Bonus 100 AH", Naive.schedule_with_score Naive.naive_choice_better (Linear.one_bonus 100) ;
-  ]
+  let strategies = ref [] in
+  let m_bonus = 6 in
+  for m_tostart = 1 to 3 do
+    let m_tostart = 2 * m_tostart in
+    for m_wait = 4 to 6 do
+      let m_wait = m_wait in
+      strategies :=
+        (
+          (Format.sprintf "Multipliers %d %d %d %d" m_bonus 0 m_tostart m_wait) ,
+          Naive.schedule_with_score (Linear.multipliers m_bonus 0 m_tostart m_wait)
+        )
+        :: !strategies
+    done
+  done;
+  !strategies
 
 let () =
   print_endline "==========[ Les Boloss ]==========";
