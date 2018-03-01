@@ -76,7 +76,7 @@ let solution_to_file filename solution =
 let score problem solution =
   let score = ref 0 in
   let ride_assigned = Array.make (Array.length problem.rides) (-1) in
-  for vehicle = 0 to problem.vehicles do
+  for vehicle = 0 to problem.vehicles - 1 do
     let position = ref (0, 0) in
     let time = ref 0 in
     List.iter
