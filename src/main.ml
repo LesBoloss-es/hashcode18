@@ -13,7 +13,7 @@ let strategies : (string * (problem -> solution)) list =
       strategies :=
         (
           (Format.sprintf "Multipliers %d %d %d %d" m_bonus 0 m_tostart m_wait) ,
-          Naive.schedule_with_score (Linear.multipliers m_bonus 0 m_tostart m_wait)
+          Naive.schedule_with_score Naive.naive_choice_better (Linear.multipliers m_bonus 0 m_tostart m_wait)
         )
         :: !strategies
     done
