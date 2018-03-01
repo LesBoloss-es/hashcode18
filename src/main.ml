@@ -1,8 +1,12 @@
 
 open Common
 
+let neg_compare x y = - compare x y
+   
 let strategies : (string * (problem -> solution)) list =
-  ["One", Naive.schedule_with_score Linear.one]
+  ["One Bonus 1", Naive.schedule_with_score (Linear.one_bonus 1) ;
+   "One Bonus 10", Naive.schedule_with_score (Linear.one_bonus 10) ;
+   "One Bonus 100", Naive.schedule_with_score (Linear.one_bonus 100) ]
 
 let () =
   print_endline "==========[ Les Boloss ]==========";
@@ -31,7 +35,7 @@ let () =
             (score, name, solution))
           strategies
       in
-      match List.sort compare scores with
+      match List.sort neg_compare scores with
       | (score, name, solution) :: _ ->
          Format.printf "  Taking %s's solution@." name;
          total_score := !total_score + score;
